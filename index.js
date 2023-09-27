@@ -16,7 +16,7 @@ app.use(
     cors({
         origin: [
             "http://localhost:3000",
-            "https://zippy-bubblegum-e15389.netlify.app/",
+            "https://smartthomee.netlify.app",
         ],
         credentials: true,
         methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE"],

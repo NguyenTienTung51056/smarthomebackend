@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const { create, update, devices, device } = require('../controller/device');
+const { create, update, devices, device,updateStatus } = require('../controller/device');
 
 router.post("/", create);
 router.put("/:id", update);
-// router.patch("/:id", updateStatus);
+router.patch("/:id", updateStatus);
 // router.patch("/:id", updateMode);
 // router.patch("/:id", updateData);
 // router.delete("/:id", deleteDevice);

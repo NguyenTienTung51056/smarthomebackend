@@ -19,7 +19,7 @@ app.use(
             "https://smartthomee.netlify.app",
         ],
         credentials: true,
-        methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE"],
+        methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE","PATCH"],
         exposedHeaders: ["Set-Cookie"],
     })
 );

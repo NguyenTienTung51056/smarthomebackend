@@ -16,10 +16,24 @@ const create = async (req, res) => {
 const update = async (req, res) => {
     const device = await Device.findById(req.params.id);
     try {
-        const updatedDevice = await Device.findByIdAndUpdate(req.params.id, {
+        const updatedDevice = await Device.updateOne(device, {
             $set: req.body,
         }, { new: true });
         res.status(200).json(updatedDevice);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+}
+
+//update status device
+
+const updateStatus = async (req, res) => {
+    const device = await Device.findById(req.params.id);
+    try {
+        const updatedStatus = await Device.updateOne(device, {
+            $set: req.body,
+        }, { new: true });
+        res.status(200).json(updatedStatus);
     } catch (err) {
         res.status(500).json(err);
     }
@@ -48,4 +62,4 @@ const device = async (req, res) => {
 }
 
 
-module.exports = { create, update, devices, device };
+module.exports = { create, update, devices, device, updateStatus };

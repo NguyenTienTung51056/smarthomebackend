@@ -61,5 +61,15 @@ const device = async (req, res) => {
     }
 }
 
+//delete device
+const deleteDevice = async (req, res) => {
+    try {
+        const device = await Device.deleteOne(req.params.id);
+        res.status(200).json(device);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+}
 
-module.exports = { create, update, devices, device, updateStatus };
+
+module.exports = { create, update, devices, device, updateStatus, deleteDevice };

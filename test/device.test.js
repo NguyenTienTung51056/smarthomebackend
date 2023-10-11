@@ -1,169 +1,172 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const app = 'https://smarthomebackend.vercel.app/'  // Assuming your app is exported from index.js
-const expect = chai.expect;
+const app = require('../index'); // Import your app
 
 chai.use(chaiHttp);
+const expect = chai.expect;
 
-describe('Device API', () => {
-  // Test case 1: Create a new device
-  // it('should create a new device', (done) => {
-  //   chai
-  //     .request(app)
-  //     .post('/devices')
-  //     .send({
-  //       "name": "Light test",
-  //       "type": "Light test",
-  //       "status": "off test"
-  //     })
-  //     .end((err, res) => {
-  //       expect(res).to.have.status(200);
-  //       expect(res.body).to.be.an('object');
-  //       // Add additional assertions as needed
-  //       // ...
-  //       done();
-  //     });
-  // });
-
-  // Test case 2: Update an existing device
-  it('should update an existing device', (done) => {
-    chai
-      .request(app)
-      .put('/devices/:id')  // Replace :id with a valid device ID
-      .send({
-        // Add the necessary device data for updating
-        // ...
-      })
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        expect(res.body).to.be.an('object');
-        // Add additional assertions as needed
-        // ...
-        done();
-      });
-  });
-
-  // Test case 3: Update device status
-  it('should update device status', (done) => {
-    chai
-      .request(app)
-      .patch('/devices/:id')  // Replace :id with a valid device ID
-      .send({
-        // Add the necessary data for updating device status
-        // ...
-      })
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        expect(res.body).to.be.an('object');
-        // Add additional assertions as needed
-        // ...
-        done();
-      });
-  });
-
-  // Test case 4: Get all devices
-  it('should get all devices', (done) => {
+describe('GET API endpoint', function () {
+  this.timeout(6000);  // Set a timeout of 5 seconds
+  it('should get all data', (done) => {
     chai
       .request(app)
       .get('/devices')
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.be.an('array');
-        // Add additional assertions as needed
-        // ...
         done();
       });
   });
+});
 
-  // Test case 5: Get a device by ID
-  it('should get a device by ID', (done) => {
+describe('GET API endpoint', function () {
+  this.timeout(6000);  // Set a timeout of 5 seconds
+  it('should get a specific resource', (done) => {
     chai
       .request(app)
-      .get(`/devices/find/650b12012008afbe5b7095eb`)  // Replace :id with a valid device ID
+      .get('/devices/find/650b12012008afbe5b7095eb')  // Replace with a valid ID
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.be.an('object');
-        // Add additional assertions as needed
-        // ...
         done();
       });
   });
+});
 
-  // Add more test cases for other API endpoints
-  // ...
 
-  // Test case 6: Delete a device
-  it('should delete a device', (done) => {
+// Test handling non-existent resource
+describe('GET /api/data/:nonExistentId', function () {
+  this.timeout(6000);  // Set a timeout of 5 seconds
+  it('should return 404 for non-existent resource', (done) => {
+    const nonExistentId = '5f7a1c0b4e1d351394ae9d53'
     chai
       .request(app)
-      .delete('/devices/651fa74599c983aacdb848ea')  // Replace :id with a valid device ID
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        expect(res.body).to.be.an('object');
-        // Add additional assertions as needed
-        // ...
-        done();
-      });
-  });
-  
-
-  // Test case 7: Try to delete a non-existing device
-  it('should return 404 when trying to delete a non-existing device', (done) => {
-    chai
-      .request(app)
-      .delete('/devices/nonexistent')  // Replace nonexistent with a non-existing device ID
+      .get(`/devices/find/${nonExistentId}`)
       .end((err, res) => {
         expect(res).to.have.status(404);
-        // Add additional assertions as needed
-        // ...
         done();
       });
   });
+});
 
-  // Test case 8: Attempt to create a device with invalid data
-  it('should return 400 when creating a device with invalid data', (done) => {
+describe('GET /api/data/:invalidId', function () {
+  this.timeout(6000);  // Set a timeout of 5 seconds
+  it('should return 400 for invalid resource ID format', (done) => {
+    const invalidId = 'invalid_id'; // Replace with an invalid resource ID
     chai
       .request(app)
-      .post('/devices')
-      .send({
-        // Add invalid device data
-        // ...
-      })
+      .get(`/devices/find/${invalidId}`)
       .end((err, res) => {
         expect(res).to.have.status(400);
-        // Add additional assertions as needed
-        // ...
         done();
       });
   });
+});
 
-  // Test case 9: Attempt to update a device with invalid data
-  it('should return 400 when updating a device with invalid data', (done) => {
-    chai
-      .request(app)
-      .put('/devices/:id')  // Replace :id with a valid device ID
-      .send({
-        // Add invalid device data
-        // ...
-      })
-      .end((err, res) => {
-        expect(res).to.have.status(400);
-        // Add additional assertions as needed
-        // ...
-        done();
-      });
+
+
+
+
+describe('Backend API', () => {
+  let createdResourceId; // Variable to store the created resource ID
+
+  // Test POST method to create a new resource
+  describe('POST /devices', function () {
+    this.timeout(6000);  // Set a timeout of 5 seconds
+    it('should create a new resource', (done) => {
+      const newData = { name: 'New Resource', type: "light" };
+      chai
+        .request(app)
+        .post('/devices')
+        .send(newData)
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('_id'); // Assuming the response includes the ID
+          createdResourceId = res.body._id; // Store the created resource ID
+          done();
+        });
+    });
   });
 
-  // Test case 10: Attempt to get a device by an invalid ID
-  it('should return 400 when getting a device with an invalid ID', (done) => {
-    chai
-      .request(app)
-      .get('/devices/invalidID')
-      .end((err, res) => {
-        expect(res).to.have.status(400);
-        // Add additional assertions as needed
-        // ...
-        done();
-      });
+  // Test PUT method to update the created resource
+  describe('PUT /api/data/:id', function () {
+    this.timeout(6000);  // Set a timeout of 5 seconds
+    it('should update the created resource', (done) => {
+      const updatedData = { name: 'Updated Resource' };
+      chai
+        .request(app)
+        .put(`/devices/${createdResourceId}`)
+        .send(updatedData)
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.have.property('name').equal(updatedData.name);
+          done();
+        });
+    });
+  });
+
+  // Test PATCH method to partially update the created resource
+  describe('PATCH /api/data/:id', function () {
+    this.timeout(6000);  // Set a timeout of 5 seconds
+    it('should partially update the created resource', (done) => {
+      const partialDataUpdate = { type: 'Partial Update' };
+      chai
+        .request(app)
+        .patch(`/devices/${createdResourceId}`)
+        .send(partialDataUpdate)
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.have.property('type').equal(partialDataUpdate.type);
+          done();
+        });
+    });
+  });
+
+  describe('PUT /api/data/:id', function () {
+    this.timeout(6000);  // Set a timeout of 5 seconds
+    it('should return 400 for invalid request (invalid payload)', (done) => {
+      const resourceId = createdResourceId; // Replace with a valid resource ID
+      const invalidData = { invalidField: 'Invalid Field' }; // Invalid payload
+      chai
+        .request(app)
+        .put(`/devices/${resourceId}`)
+        .send(invalidData)
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          done();
+        });
+    });
+  });
+
+  describe('DELETE /api/data/:id', function () {
+    this.timeout(6000);  // Set a timeout of 5 seconds
+    it('should handle resource deletion failure with invalid resource ID', (done) => {
+      const invalidResourceId = 'invalidId'; // Invalid resource ID (e.g., invalid format)
+      chai
+        .request(app)
+        .delete(`/devices/${invalidResourceId}`)
+        .end((err, res) => {
+          expect(res).to.have.status(500); // Replace with appropriate error status if needed
+          done();
+        });
+    });
+  });
+
+
+
+  // Test DELETE method to delete the created resource
+  describe('DELETE /api/data/:id', function () {
+    this.timeout(6000);  // Set a timeout of 5 seconds
+    it('should delete the created resource', (done) => {
+      chai
+        .request(app)
+        .delete(`/devices/${createdResourceId}`)
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.have.property('message').equal('Device has been deleted...');
+          done();
+        });
+    });
   });
 });

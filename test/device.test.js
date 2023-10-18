@@ -9,7 +9,7 @@ describe('GET API endpoint', function () {
   this.timeout(6000);  // Set a timeout of 5 seconds
   it('should get all data', (done) => {
     chai
-      .request(app)
+      .request('https://backend-ndccl9h9s-nguyentientung51056.vercel.app')
       .get('/devices')
       .end((err, res) => {
         expect(res).to.have.status(200);
@@ -23,7 +23,7 @@ describe('GET API endpoint', function () {
   this.timeout(6000);  // Set a timeout of 5 seconds
   it('should get a specific resource', (done) => {
     chai
-      .request(app)
+      .request("https://backend-ndccl9h9s-nguyentientung51056.vercel.app")
       .get('/devices/find/650b12012008afbe5b7095eb')  // Replace with a valid ID
       .end((err, res) => {
         expect(res).to.have.status(200);
@@ -40,7 +40,7 @@ describe('GET /api/data/:nonExistentId', function () {
   it('should return 404 for non-existent resource', (done) => {
     const nonExistentId = '5f7a1c0b4e1d351394ae9d53'
     chai
-      .request(app)
+      .request("https://backend-ndccl9h9s-nguyentientung51056.vercel.app")
       .get(`/devices/find/${nonExistentId}`)
       .end((err, res) => {
         expect(res).to.have.status(404);
@@ -54,7 +54,7 @@ describe('GET /api/data/:invalidId', function () {
   it('should return 400 for invalid resource ID format', (done) => {
     const invalidId = 'invalid_id'; // Replace with an invalid resource ID
     chai
-      .request(app)
+      .request("https://backend-ndccl9h9s-nguyentientung51056.vercel.app")
       .get(`/devices/find/${invalidId}`)
       .end((err, res) => {
         expect(res).to.have.status(400);
@@ -76,7 +76,7 @@ describe('Backend API', () => {
     it('should create a new resource', (done) => {
       const newData = { name: 'New Resource', type: "light" };
       chai
-        .request(app)
+        .request("https://backend-ndccl9h9s-nguyentientung51056.vercel.app")
         .post('/devices')
         .send(newData)
         .end((err, res) => {
@@ -95,7 +95,7 @@ describe('Backend API', () => {
     it('should update the created resource', (done) => {
       const updatedData = { name: 'Updated Resource' };
       chai
-        .request(app)
+        .request("https://backend-ndccl9h9s-nguyentientung51056.vercel.app")
         .put(`/devices/${createdResourceId}`)
         .send(updatedData)
         .end((err, res) => {
@@ -112,7 +112,7 @@ describe('Backend API', () => {
     it('should partially update the created resource', (done) => {
       const partialDataUpdate = { type: 'Partial Update' };
       chai
-        .request(app)
+        .request("https://backend-ndccl9h9s-nguyentientung51056.vercel.app")
         .patch(`/devices/${createdResourceId}`)
         .send(partialDataUpdate)
         .end((err, res) => {
@@ -129,7 +129,7 @@ describe('Backend API', () => {
       const resourceId = createdResourceId; // Replace with a valid resource ID
       const invalidData = { invalidField: 'Invalid Field' }; // Invalid payload
       chai
-        .request(app)
+        .request("https://backend-ndccl9h9s-nguyentientung51056.vercel.app")
         .put(`/devices/${resourceId}`)
         .send(invalidData)
         .end((err, res) => {
@@ -144,10 +144,10 @@ describe('Backend API', () => {
     it('should handle resource deletion failure with invalid resource ID', (done) => {
       const invalidResourceId = 'invalidId'; // Invalid resource ID (e.g., invalid format)
       chai
-        .request(app)
+        .request("https://backend-ndccl9h9s-nguyentientung51056.vercel.app")
         .delete(`/devices/${invalidResourceId}`)
         .end((err, res) => {
-          expect(res).to.have.status(500); // Replace with appropriate error status if needed
+          expect(res).to.have.status(500); // Replace with "https://backend-ndccl9h9s-nguyentientung51056.vercel.app"ropriate error status if needed
           done();
         });
     });
@@ -160,7 +160,7 @@ describe('Backend API', () => {
     this.timeout(6000);  // Set a timeout of 5 seconds
     it('should delete the created resource', (done) => {
       chai
-        .request(app)
+        .request("https://backend-ndccl9h9s-nguyentientung51056.vercel.app")
         .delete(`/devices/${createdResourceId}`)
         .end((err, res) => {
           expect(res).to.have.status(200);

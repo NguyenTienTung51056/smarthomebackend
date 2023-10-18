@@ -30,6 +30,5 @@ app.use(express.json());
 //router
 route(app);
 
-const server = app.listen(PORT, () => console.log(`Server started on port ${PORT} `.cyan.white.bold));
+app.listen(PORT, () => console.log(`Server started on port ${PORT} `.cyan.white.bold));
 
-module.exports = server;
